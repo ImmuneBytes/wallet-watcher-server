@@ -1,18 +1,3 @@
-const TelegramBot = require("node-telegram-bot-api");
-// const axios = require("axios");
-require("dotenv").config();
-
-// replace the value below with the Telegram token you receive from @BotFather
-const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-
-// Create a bot that uses 'polling' to fetch new updates
-const bot = new TelegramBot(TOKEN, { polling: true });
-
-bot.on("message", (message) => {
-    let chat_id = message.from.id;
-    bot.sendMessage(chat_id, "Hi there. Thank you for subscribing to Whale Watcher by ImmuneBytes!");
-});
-
 // const chat_id = "-1001515667431";
 // let message = "Note: ";
 
