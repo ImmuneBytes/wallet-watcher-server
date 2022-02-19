@@ -36,7 +36,7 @@ bot.on("message", (message) => {
     let chat_id = message.from.id;
     let username = message.from.username;
     bot.sendMessage(chat_id, "Hi there. Thank you for subscribing to Whale Watcher by ImmuneBytes!");
-    addChatIdToMoralis(username, chat_id);
+    bot.sendMessage(chat_id, addChatIdToMoralis(username, chat_id));
 });
 
 addChatIdToMoralis = async (username, chat_id) => {
@@ -47,7 +47,8 @@ addChatIdToMoralis = async (username, chat_id) => {
     const query = new Moralis.Query(User);
     query.equalTo("telegram", username);
     const result = await query.first({ useMasterKey: true });
-    console.log(result);
+    console.log(JSON.stringify(result));
+    return JSON.stringify(result);
 };
 
 function listen() {
