@@ -42,12 +42,14 @@ bot.on("message", (message) => {
 addChatIdToMoralis = async (username, chat_id) => {
     console.log("username:", username);
     console.log("chat_id:", chat_id);
-    await Moralis.start({ serverUrl: process.env.MORALIS_SERVER_URL, appId: process.env.MORALIS_APP_ID });
+    console.log("process.env.MORALIS_SERVER_URL:", process.env.MORALIS_SERVER_URL);
+    await Moralis.start({ serverUrl: process.env.MORALIS_SERVER_URL, appId: process.env.MORALIS_APP_ID, masterKey: process.env.MORALIS_MASTER_KEY });
 
     const User = Moralis.Object.extend("User");
     const query = new Moralis.Query(User);
     query.equalTo("telegram", username);
     const result = await query.first({ useMasterKey: true });
+    console.log("result:", JSON.stringify(result));
     result.set("chat_id", chat_id);
     await result.save(null, { useMasterKey: true });
     console.log("result:", JSON.stringify(result));
