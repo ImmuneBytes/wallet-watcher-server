@@ -33,11 +33,9 @@ app.post(`/bot${TOKEN}`, (req, res) => {
     res.sendStatus(200);
 });
 
-startMoralis = async () => {
+(async () => {
     await Moralis.start({ serverUrl: process.env.MORALIS_SERVER_URL, appId: process.env.MORALIS_APP_ID, masterKey: process.env.MORALIS_MASTER_KEY });
-};
-
-startMoralis();
+})();
 
 addChatIdToMoralis = async (username, chat_id) => {
     console.log("username:", username);
@@ -50,7 +48,11 @@ addChatIdToMoralis = async (username, chat_id) => {
     console.log("3");
     query.equalTo("telegram", username);
     console.log("4");
-    const result = await query.first({ useMasterKey: true });
+    var result;
+    (async () => {
+        result = await query.first({ useMasterKey: true });
+    })();
+
     console.log("5");
     let __chat_id = result.get("chat_id");
     console.log("__chat_id:", __chat_id);
@@ -58,7 +60,10 @@ addChatIdToMoralis = async (username, chat_id) => {
     if (!__chat_id) {
         result.set("chat_id", chat_id);
         console.log("6");
-        await result.save(null, { useMasterKey: true });
+        (async () => {
+            await result.save(null, { useMasterKey: true });
+        })();
+
         console.log("result:", JSON.stringify(result));
 
         bot.sendMessage(chat_id, "Hi there. Thank you for subscribing to Whale Watcher by ImmuneBytes!");
