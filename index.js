@@ -61,7 +61,6 @@ bot.on("message", async (message) => {
     bot.sendMessage(chat_id, "Hi there. Thank you for subscribing to Whale Watcher by ImmuneBytes!");
     await addChatIdToMoralis(username, chat_id);
 });
-addChatIdToMoralis("pushpit07", "32632663");
 
 function listen() {
     try {
