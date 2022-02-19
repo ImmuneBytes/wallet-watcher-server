@@ -35,7 +35,7 @@ app.post(`/bot${TOKEN}`, (req, res) => {
 bot.on("message", (message) => {
     let chat_id = message.from.id;
     let username = message.from.username;
-    bot.sendMessage(chat_id, "Hi there. Thank you for subscribing to Whale Watcher by ImmuneBytes!");
+    // bot.sendMessage(chat_id, "Hi there. Thank you for subscribing to Whale Watcher by ImmuneBytes!");
     bot.sendMessage(chat_id, addChatIdToMoralis(username, chat_id));
 });
 
