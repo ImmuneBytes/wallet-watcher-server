@@ -49,5 +49,5 @@ app.post(`/bot${TOKEN}`, (req, res) => {
 
 bot.on("message", (message) => {
     let chat_id = message.from.id;
-    bot.sendMessage(chat_id, "I'm alive!");
+    bot.sendMessage(chat_id, "Hi there. Thank you for subscribing to Whale Watcher by ImmuneBytes!");
 });
