@@ -33,11 +33,15 @@ app.post(`/bot${TOKEN}`, (req, res) => {
     res.sendStatus(200);
 });
 
+startMoralis = async () => {
+    await Moralis.start({ serverUrl: process.env.MORALIS_SERVER_URL, appId: process.env.MORALIS_APP_ID, masterKey: process.env.MORALIS_MASTER_KEY });
+};
+
+startMoralis();
+
 addChatIdToMoralis = async (username, chat_id) => {
     console.log("username:", username);
     console.log("chat_id:", chat_id);
-
-    await Moralis.start({ serverUrl: process.env.MORALIS_SERVER_URL, appId: process.env.MORALIS_APP_ID, masterKey: process.env.MORALIS_MASTER_KEY });
 
     console.log("1");
     const User = Moralis.Object.extend("User");
