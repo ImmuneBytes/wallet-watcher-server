@@ -4,10 +4,10 @@ require("dotenv").config();
 
 // replace the value below with the Telegram token you receive from @BotFather
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const bot = new TelegramBot(TOKEN, { polling: true });
 
 const sendTelegramWelcomeMessage = async (req, res) => {
     try {
+        const bot = new TelegramBot(TOKEN);
         // Create a bot that uses 'polling' to fetch new updates
         bot.on("message", (message) => {
             let chat_id = message.from.id;
