@@ -48,17 +48,25 @@ addChatIdToMoralis = async (username, chat_id) => {
     console.log("4");
     const result = await query.first({ useMasterKey: true });
     console.log("5");
-    result.set("chat_id", chat_id);
-    console.log("6");
-    await result.save(null, { useMasterKey: true });
-    console.log("7");
-    console.log("result:", JSON.stringify(result));
+    let __chat_id = result.get("chat_id");
+    console.log("__chat_id:", __chat_id);
+
+    if (!__chat_id) {
+        result.set("chat_id", chat_id);
+        console.log("6");
+        await result.save(null, { useMasterKey: true });
+        console.log("result:", JSON.stringify(result));
+
+        bot.sendMessage(chat_id, "Hi there. Thank you for subscribing to Whale Watcher by ImmuneBytes!");
+    } else {
+        console.log("Chat id already exists");
+    }
 };
 
 bot.on("message", async (message) => {
     let chat_id = message.from.id;
     let username = message.from.username;
-    bot.sendMessage(chat_id, "Hi there. Thank you for subscribing to Whale Watcher by ImmuneBytes!");
+
     await addChatIdToMoralis(username, chat_id.toString());
 });
 
