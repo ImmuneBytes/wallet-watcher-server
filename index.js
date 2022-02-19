@@ -59,7 +59,7 @@ bot.on("message", async (message) => {
     let chat_id = message.from.id;
     let username = message.from.username;
     bot.sendMessage(chat_id, "Hi there. Thank you for subscribing to Whale Watcher by ImmuneBytes!");
-    await addChatIdToMoralis(username, chat_id);
+    await addChatIdToMoralis(username, chat_id.toString());
 });
 
 function listen() {
