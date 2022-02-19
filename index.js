@@ -52,7 +52,6 @@ addChatIdToMoralis = async (username, chat_id) => {
     console.log("result:", JSON.stringify(result));
     result.set("chat_id", chat_id);
     await result.save(null, { useMasterKey: true });
-    console.log("result:", JSON.stringify(result));
 
     return JSON.stringify(result);
 };
