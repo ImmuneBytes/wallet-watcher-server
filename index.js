@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const TelegramBot = require("node-telegram-bot-api");
+const Moralis = require("moralis/node");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -15,22 +16,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 require("./routes")(app);
-
-function listen() {
-    try {
-        app.listen(PORT, () => {
-            console.log("Server running on port:", PORT);
-        });
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-Promise.all([])
-    .then(listen)
-    .catch((err) => {
-        console.log("Error:", err);
-    });
 
 const url = "https://wallet-watcher-server.vercel.app";
 // replace the value below with the Telegram token you receive from @BotFather
@@ -49,5 +34,34 @@ app.post(`/bot${TOKEN}`, (req, res) => {
 
 bot.on("message", (message) => {
     let chat_id = message.from.id;
+    let username = message.from.username;
     bot.sendMessage(chat_id, "Hi there. Thank you for subscribing to Whale Watcher by ImmuneBytes!");
+    addChatIdToMoralis(username, chat_id);
 });
+
+addChatIdToMoralis = async (username, chat_id) => {
+    console.log(Moralis.CoreManager.get("VERSION"));
+    await Moralis.start({ serverUrl: process.env.MORALIS_SERVER_URL, appId: process.env.MORALIS_APP_ID });
+
+    const User = Moralis.Object.extend("User");
+    const query = new Moralis.Query(User);
+    query.equalTo("telegram", username);
+    const result = await query.first({ useMasterKey: true });
+    console.log(result);
+};
+
+function listen() {
+    try {
+        app.listen(PORT, () => {
+            console.log("Server running on port:", PORT);
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+Promise.all([])
+    .then(listen)
+    .catch((err) => {
+        console.log("Error:", err);
+    });
