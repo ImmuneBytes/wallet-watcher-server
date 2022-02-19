@@ -35,25 +35,28 @@ app.post(`/bot${TOKEN}`, (req, res) => {
 bot.on("message", (message) => {
     let chat_id = message.from.id;
     let username = message.from.username;
-    // bot.sendMessage(chat_id, "Hi there. Thank you for subscribing to Whale Watcher by ImmuneBytes!");
-    bot.sendMessage(chat_id, addChatIdToMoralis(username, chat_id));
+    bot.sendMessage(chat_id, "Hi there. Thank you for subscribing to Whale Watcher by ImmuneBytes!");
+    addChatIdToMoralis(username, chat_id);
 });
 
 addChatIdToMoralis = async (username, chat_id) => {
     console.log("username:", username);
     console.log("chat_id:", chat_id);
-    console.log("process.env.MORALIS_SERVER_URL:", process.env.MORALIS_SERVER_URL);
     await Moralis.start({ serverUrl: process.env.MORALIS_SERVER_URL, appId: process.env.MORALIS_APP_ID, masterKey: process.env.MORALIS_MASTER_KEY });
 
+    console.log("1");
     const User = Moralis.Object.extend("User");
+    console.log("2");
     const query = new Moralis.Query(User);
+    console.log("3");
     query.equalTo("telegram", username);
+    console.log("4");
     const result = await query.first({ useMasterKey: true });
-    console.log("result:", JSON.stringify(result));
+    console.log("5");
     result.set("chat_id", chat_id);
+    console.log("6");
     await result.save(null, { useMasterKey: true });
-
-    return JSON.stringify(result);
+    console.log("7");
 };
 
 function listen() {
