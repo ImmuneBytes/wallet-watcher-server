@@ -8,8 +8,6 @@ const PORT = process.env.PORT || 5000;
 
 require("dotenv").config();
 
-Moralis.start({ serverUrl: process.env.MORALIS_SERVER_URL, appId: process.env.MORALIS_APP_ID, masterKey: process.env.MORALIS_MASTER_KEY });
-
 app.use(
     cors({
         origin: ["https://wallet-watcher.vercel.app", "https://wallet-watcher.vercel.app/", "http://localhost:3000"],
@@ -35,16 +33,11 @@ app.post(`/bot${TOKEN}`, (req, res) => {
     res.sendStatus(200);
 });
 
-bot.on("message", (message) => {
-    let chat_id = message.from.id;
-    let username = message.from.username;
-    bot.sendMessage(chat_id, "Hi there. Thank you for subscribing to Whale Watcher by ImmuneBytes!");
-    addChatIdToMoralis(username, chat_id);
-});
-
 addChatIdToMoralis = async (username, chat_id) => {
     console.log("username:", username);
     console.log("chat_id:", chat_id);
+
+    await Moralis.start({ serverUrl: process.env.MORALIS_SERVER_URL, appId: process.env.MORALIS_APP_ID, masterKey: process.env.MORALIS_MASTER_KEY });
 
     console.log("1");
     const User = Moralis.Object.extend("User");
@@ -59,7 +52,16 @@ addChatIdToMoralis = async (username, chat_id) => {
     console.log("6");
     await result.save(null, { useMasterKey: true });
     console.log("7");
+    console.log("result:", JSON.stringify(result));
 };
+
+bot.on("message", async (message) => {
+    let chat_id = message.from.id;
+    let username = message.from.username;
+    bot.sendMessage(chat_id, "Hi there. Thank you for subscribing to Whale Watcher by ImmuneBytes!");
+    await addChatIdToMoralis(username, chat_id);
+});
+addChatIdToMoralis("pushpit07", "32632663");
 
 function listen() {
     try {
