@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const TelegramBot = require("node-telegram-bot-api");
-const Moralis = require("moralis/node");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -42,6 +41,7 @@ bot.on("message", (message) => {
 addChatIdToMoralis = async (username, chat_id) => {
     console.log("username:", username);
     console.log("chat_id:", chat_id);
+    const Moralis = require("moralis/node");
     await Moralis.start({ serverUrl: process.env.MORALIS_SERVER_URL, appId: process.env.MORALIS_APP_ID, masterKey: process.env.MORALIS_MASTER_KEY });
 
     console.log("1");
