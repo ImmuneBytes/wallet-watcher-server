@@ -1,1 +1,1 @@
-# wallet-watcher-server
+# Wallet watcher server
