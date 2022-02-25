@@ -35,14 +35,12 @@ app.post(`/bot${TOKEN}`, (req, res) => {
 
 startMoralis = async () => {
     await Moralis.start({ serverUrl: process.env.MORALIS_SERVER_URL, appId: process.env.MORALIS_APP_ID, masterKey: process.env.MORALIS_MASTER_KEY });
+    console.log("Moralis connection established!");
 };
 
 startMoralis();
 
 addChatIdToMoralis = async (username, chat_id) => {
-    console.log("username:", username);
-    console.log("chat_id:", chat_id);
-
     console.log("1");
     const User = Moralis.Object.extend("User");
     console.log("2");
@@ -60,8 +58,6 @@ addChatIdToMoralis = async (username, chat_id) => {
         console.log("6");
         await result.save(null, { useMasterKey: true });
         console.log("result:", JSON.stringify(result));
-
-        bot.sendMessage(chat_id, "Hi there. Thank you for subscribing to Whale Watcher by ImmuneBytes!");
     } else {
         console.log("Chat id already exists");
     }
@@ -71,7 +67,13 @@ bot.on("message", async (message) => {
     let chat_id = message.from.id;
     let username = message.from.username;
 
+    console.log("Sending message...");
+    bot.sendMessage(chat_id, "Hi there. Thank you for subscribing to Whale Watcher by ImmuneBytes!");
+    console.log("Message sent!");
+
+    console.log("Adding ChatId:", chat_id, "to Moralis for user:", username);
     await addChatIdToMoralis(username, chat_id.toString());
+    console.log("ChatId is set!");
 });
 
 function listen() {
